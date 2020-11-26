@@ -1,42 +1,53 @@
 const greetingService = require('../services/greeting.svc.js');
-const validate = (pattern, input) => pattern.test(input);
-const NAME_PATTERN = /^[A-Za-z]{2,}$/;
-class GreetingController{
+const Joi = require('joi'); 
 
+const inputPattern = Joi.object().keys({
+    name : Joi.string().regex(/^[a-zA-Z ]+$/).min(3).required(),
+    message : Joi.string().allow('', null)
+})
+
+class GreetingController{
     /**
      * @description Create and save a new greeting
      * @param NAME_PATTERN is used to validate name
      * @param res is used to send the response
      */
     create = (req, res) => {
-        const request = req;
-        const response = res;
+        const greetingData = { 
+            name : req.body.name,
+            message : req.body.message
+        }
 
-        if(!request.body.name){
-            return response.status(400).send({
-                success : false,
-                message : "Greeting name can not be empty"
+        const greetingResponse = {
+            success : null,
+            message : null,
+            data : null
+        }    
+
+        const validationResult = inputPattern.validate(greetingData); 
+
+        if(validationResult.error){
+            greetingResponse.success = false;
+            greetingResponse.message =  "Name should contain only characters of minimum length 2";
+            return res.status(400).send({
+                greetingResponse
             });
         }
 
-        if(!validate(NAME_PATTERN, request.body.name)){
-            return response.status(400).send({
-                success : false,
-                message : "Name should contain only characters of minimum length 2"
-            });
-        }
-
-        greetingService.create(request, function(error, data){
+        greetingService.create(greetingData, (error, data) => {
             if(error){
-                return response.status(500).send({
-                success : false,
-                message : "Some error occurred while creating greeting"
+                greetingResponse.success = false
+                greetingResponse.message = "Some error occurred while creating greeting"
+                return res.status(500).send({
+                greetingResponse
                 });
             }
-            response.send({
-                success : true,
-                message : "Greeting added successfully !",
-                data    : data
+            
+            greetingResponse.success = true
+            greetingResponse.message = "Greeting added successfully !"
+            greetingResponse.data = data
+            res.send({
+                greetingResponse
             });
        });
     }
@@ -46,20 +57,25 @@ class GreetingController{
      * @method findAll is service class method
      */
     findAll = (req, res) => {
-        const request = req;
-        const response = res;
+        const greetingResponse = {
+            success : null,
+            message : null
+        }
 
-        greetingService.findAll(request, function(error, data){
+        greetingService.findAll((error, data) => {
             if(error){
-                return response.status(500).send({
-                    success : false,
-                    message : "Some error occurred while retrieving greetings"
+                greetingResponse.success = false
+                greetingResponse.message = "Some error occurred while retrieving greetings"
+                return res.status(500).send({
+                   greetingResponse
                 });
             }
-            response.send({
-                success : true,
-                message : "Successfully retrieved greetings !",
-                data    : data
+
+            greetingResponse.success = true
+            greetingResponse.message = "Successfully retrieved greetings !"
+            greetingResponse.data = data
+            res.send({
+                greetingResponse
             });
         });
     }
@@ -70,26 +86,37 @@ class GreetingController{
      * @param response is used to send the response
      */
     findOne = (req, res) => {
-        const request = req;
-        const response = res;
+        const greetingData = {
+            greetingID : req.params.greetingID
+        }
 
-        greetingService.findOne(request, function(error, data) {
+        const greetingResponse = {
+            success : null,
+            message : null
+        }
+
+        greetingService.findOne(greetingData, (error, data) => {
             if(error){
-                return response.status(500).send({
-                    success : false,
-                    message : "Error retrieving note with id " + request.params.greetingID
+                greetingResponse.success = false
+                greetingResponse.message = "Error retrieving note with id "+ greetingData.greetingID
+                return res.status(500).send({
+                   greetingResponse
                 });
             }
+           
             if(!data){
-                return response.status(404).send({
-                    success : false,
-                    message : "Greeing not found with id" +request.params.greetingID
+                greetingResponse.success = false
+                greetingResponse.message = "Greeing not found with id : "+ greetingData.greetingID
+                return res.status(404).send({
+                    greetingResponse
                 });
             }
-            response.send({
-                success : true,
-                message : "Successfully retrieved greeting",
-                data    : data
+
+            greetingResponse.success = false
+            greetingResponse.message = "Successfully retrieved greeting with id : "+ greetingData.greetingID
+            greetingResponse.data = data
+            res.send({
+                greetingResponse
             });
         });
     }
@@ -100,26 +127,40 @@ class GreetingController{
      * @param res is used to send the response
      */
     update = (req, res) => {
-        const request = req;
-        const response = res;
+        const greetingData = { 
+            name : req.body.name,
+            message : req.body.message,
+            greetingID : req.params.greetingID
+        }
 
-        greetingService.update(request, function(error, data) {
+        const greetingResponse = {
+            success : null,
+            message : null,
+            data : null
+        }
+
+        greetingService.update(greetingData, (error, data) => {
             if(error){
-                return response.status(500).send({
-                    success : false,
-                    message: "Error updating greeting with id "+request.params.greetingID
+                greetingResponse.success = false,
+                greetingResponse.message = "Error updating greeting with id : "+ greetingData.greetingID
+                return res.status(500).send({
+                   greetingResponse
                 });
             }
+
             if(!data) {
-                return response.status(404).send({
-                    success : false,
-                    message: "Greeting not found with id "+request.params.greetingID
+                greetingResponse.success = false,
+                greetingResponse.message = "Greeting not found with id : "+ greetingData.greetingID
+                return res.status(404).send({
+                    greetingResponse
                 });
             }
-            response.send({
-                success : true,
-                message : "Greeting updated successfully !",
-                data    : data
+
+            greetingResponse.success = true,
+            greetingResponse.message =  "Greeting updated successfully !",
+            greetingResponse.data = data
+            res.send({
+                greetingResponse
             });
         });
     }
@@ -130,25 +171,36 @@ class GreetingController{
      * @param response is used to send the response 
      */
     delete(req, res){
-        const request = req;
-        const response = res;
+        const greetingData = { 
+            greetingID : req.params.greetingID
+        }
 
-        greetingService.delete(request, function(error, data) {
+        const greetingResponse = {
+            success : null,
+            message : null,
+        }
+
+        greetingService.delete(greetingData, (error, data) => {
             if(error){
-                return response.status(500).send({
-                    success : false,
-                    message : "Could not delete greeting with id "+request.params.greetingID
+                greetingResponse.success = false
+                greetingResponse.message = "Could not delete greeting with id : "+ greetingData.greetingID
+                return res.status(500).send({
+                   greetingResponse
                 });
             }
+
             if(!data) {
-                return response.status(404).send({
-                    success : false,
-                    message : "Greeting not found with id "+request.params.greetingID
+                greetingResponse.success = false
+                greetingResponse.message = "Greeting not found with id : "+ greetingData.greetingID
+                return res.status(404).send({
+                    greetingResponse
                 });
             }
-            response.send({
-                success : true,
-                message : "Greeting deleted successfully !",
+
+            greetingResponse.success = true
+            greetingResponse.message = "Greeting deleted successfully !"
+            res.send({
+                greetingResponse
             });
         });
     }

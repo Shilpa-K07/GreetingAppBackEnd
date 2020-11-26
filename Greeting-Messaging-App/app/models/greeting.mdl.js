@@ -9,44 +9,43 @@ const GreetingSchema = mongoose.Schema({
 const Greeting = mongoose.model('Greeting', GreetingSchema);
 
 class GreetingModel {
-create = (req, callBack) =>{
+create = (request, callBack) =>{
         const greeting = new Greeting({
-            name: req.body.name,
-            message:req.body.message || "Empty Message"
+            name : request.name,
+            message : request.message || "Empty Message"
         });
 
-        greeting.save({}, function(error, data){
+        greeting.save({}, (error, data) => {
         return callBack(error, data);
     });
 } 
 
-findAll = (req, callBack) =>{
-    Greeting.find({}, function(error, data){
+findAll = (callBack) =>{
+    Greeting.find({}, (error, data) => {
         return callBack(error, data);
     });
 } 
 
-findOne = (req, callBack) => {
-    Greeting.findById(req.params.greetingID, function(error, data){
+findOne = (request, callBack) => {
+    Greeting.findById(request.greetingID, (error, data) => {
         return callBack(error, data);
     });
 }
 
-update = (req, callBack) => {
-    Greeting.findByIdAndUpdate(req.params.greetingID, {
-        name : req.body.name,
-        message : req.body.message || "Empty Message"
-        }, {new: true}, function(error, data) {
+update = (request, callBack) => {
+    Greeting.findByIdAndUpdate(request.greetingID, {
+        name : request.name,
+        message : request.message || "Empty Message"
+        }, {new: true}, (error, data) => {
         return callBack(error, data);
     });
 }
 
-deleteById = (req, callBack) => {
-    Greeting.findByIdAndRemove(req.params.greetingID, function(error, data){
+deleteById = (request, callBack) => {
+    Greeting.findByIdAndRemove(request.greetingID, (error, data) => {
         return callBack(error, data);
     });
 }
-
 }
 
 module.exports = new GreetingModel();

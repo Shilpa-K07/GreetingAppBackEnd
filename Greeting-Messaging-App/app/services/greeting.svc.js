@@ -8,7 +8,7 @@ class GreetingService {
      */
     create = (request, callBack) => {
         // create a greeting
-         Greeting.create(request, function(error, data){
+         Greeting.create(request, (error, data) => {
              return callBack(error, data);
          })
     }
@@ -18,8 +18,8 @@ class GreetingService {
      * @method find is used to retrieve greetings
      * @param callBack is the callBack for controller
      */
-    findAll = (request, callBack) => {
-            Greeting.findAll(request, function(error, data){
+    findAll = (callBack) => {
+            Greeting.findAll((error, data) => {
              return callBack(error, data);
          });
     }
@@ -30,7 +30,7 @@ class GreetingService {
      * @param callBack is the callBack for controller
      */
     findOne = (request, callBack) => {
-        Greeting.findOne(request, function(error, data){
+        Greeting.findOne(request, (error, data) => {
             return callBack(error, data);
         });
     }
@@ -41,7 +41,7 @@ class GreetingService {
      * @param callBack is the callBack for controller
      */
     update = (request, callBack) => {
-        Greeting.update(request, function(error, data){
+        Greeting.update(request, (error, data) => {
             return callBack(error, data);
         });
     }
@@ -52,7 +52,7 @@ class GreetingService {
      * @param callBack is the callBack for controller
      */
     delete = (request, callBack) => {
-        Greeting.deleteById(request, function(error, data){
+        Greeting.deleteById(request, (error, data) => {
             return callBack(error, data);
         });
     }
