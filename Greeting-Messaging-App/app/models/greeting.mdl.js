@@ -5,45 +5,58 @@ const GreetingSchema = mongoose.Schema({
     message : String
 }, {
     timestamps : true
+},{
+    versionKey: true
 });
 const Greeting = mongoose.model('Greeting', GreetingSchema);
 
 class GreetingModel {
-create = (request, callBack) =>{
+create = (greetingData, callBack) =>{
         const greeting = new Greeting({
-            name : request.name,
-            message : request.message || "Empty Message"
+            name : greetingData.name,
+            message : greetingData.message || "Empty Message"
         });
 
         greeting.save({}, (error, data) => {
-        return callBack(error, data);
+            if(error)
+                return callBack(error, null);
+            else
+                return callBack(null, data);
     });
 } 
 
 findAll = (callBack) =>{
     Greeting.find({}, (error, data) => {
-        return callBack(error, data);
+        if(error)
+            return callBack(error, null);
+        return callBack(null, data);
     });
 } 
 
-findOne = (request, callBack) => {
-    Greeting.findById(request.greetingID, (error, data) => {
-        return callBack(error, data);
+findOne = (greetingData, callBack) => {
+    Greeting.findById(greetingData.greetingID, (error, data) => {
+        if(error)
+            return callBack(error, null);
+            return callBack(null, data);
     });
 }
 
-update = (request, callBack) => {
-    Greeting.findByIdAndUpdate(request.greetingID, {
-        name : request.name,
-        message : request.message || "Empty Message"
+update = (greetingData, callBack) => {
+    Greeting.findByIdAndUpdate(greetingData.greetingID, {
+        name : greetingData.name,
+        message : greetingData.message || "Empty Message"
         }, {new: true}, (error, data) => {
-        return callBack(error, data);
+            if(error)
+                return callBack(error, null);
+            return callBack(null, data);
     });
 }
 
-deleteById = (request, callBack) => {
-    Greeting.findByIdAndRemove(request.greetingID, (error, data) => {
-        return callBack(error, data);
+deleteById = (greetingData, callBack) => {
+    Greeting.findByIdAndRemove(greetingData.greetingID, (error, data) => {
+        if(error)
+            return callBack(error, null);
+        return callBack(null, data);
     });
 }
 }

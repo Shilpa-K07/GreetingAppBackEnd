@@ -25,5 +25,4 @@ module.exports = (app) => {
      * @description Delete Greeting with greetingID
      */
     app.delete('/greetings/:greetingID', greetings.delete);
-
 }

@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 /**
  * @description configuring the database
  */
-require('./config/mongoDb.js')();
+require('./config/mongoDb.js');
 
 /**
  * @description require greetings routes

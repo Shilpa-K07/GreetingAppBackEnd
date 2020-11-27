@@ -6,10 +6,12 @@ class GreetingService {
      * @method save is used to save the greeting
      * @param callBack is the callBack for controller
      */
-    create = (request, callBack) => {
+    create = (greetingData, callBack) => {
         // create a greeting
-         Greeting.create(request, (error, data) => {
-             return callBack(error, data);
+         Greeting.create(greetingData, (error, data) => {
+            if(error)
+                return callBack(error, null);
+            return callBack(null, data);
          })
     }
 
@@ -20,7 +22,9 @@ class GreetingService {
      */
     findAll = (callBack) => {
             Greeting.findAll((error, data) => {
-             return callBack(error, data);
+                if(error)
+                    return callBack(error, null);
+                return callBack(null, data);
          });
     }
 
@@ -29,9 +33,11 @@ class GreetingService {
      * @method findById is used to retrieve greeting by ID
      * @param callBack is the callBack for controller
      */
-    findOne = (request, callBack) => {
-        Greeting.findOne(request, (error, data) => {
-            return callBack(error, data);
+    findOne = (greetingData, callBack) => {
+        Greeting.findOne(greetingData, (error, data) => {
+            if(error)
+                return callBack(error, null);
+            return callBack(null, data);
         });
     }
 
@@ -40,9 +46,11 @@ class GreetingService {
      * @method findByIdAndUpdate is used to update greeting by ID
      * @param callBack is the callBack for controller
      */
-    update = (request, callBack) => {
-        Greeting.update(request, (error, data) => {
-            return callBack(error, data);
+    update = (greetingData, callBack) => {
+        Greeting.update(greetingData, (error, data) => {
+            if(error)
+                return callBack(error, null);
+            return callBack(null, data);
         });
     }
 
@@ -51,9 +59,11 @@ class GreetingService {
      * @method findByIdAndRemove is used to remove greeting by ID
      * @param callBack is the callBack for controller
      */
-    delete = (request, callBack) => {
-        Greeting.deleteById(request, (error, data) => {
-            return callBack(error, data);
+    delete = (greetingData, callBack) => {
+        Greeting.deleteById(greetingData, (error, data) => {
+            if(error)
+                return callBack(error, null);
+            return callBack(null, data);
         });
     }
 }

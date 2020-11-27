@@ -19,9 +19,6 @@ class GreetingController{
         }
 
         const greetingResponse = {
-            success : null,
-            message : null,
-            data : null
         }    
 
         const validationResult = inputPattern.validate(greetingData); 
@@ -58,8 +55,6 @@ class GreetingController{
      */
     findAll = (req, res) => {
         const greetingResponse = {
-            success : null,
-            message : null
         }
 
         greetingService.findAll((error, data) => {
@@ -91,8 +86,6 @@ class GreetingController{
         }
 
         const greetingResponse = {
-            success : null,
-            message : null
         }
 
         greetingService.findOne(greetingData, (error, data) => {
@@ -112,7 +105,7 @@ class GreetingController{
                 });
             }
 
-            greetingResponse.success = false
+            greetingResponse.success = true
             greetingResponse.message = "Successfully retrieved greeting with id : "+ greetingData.greetingID
             greetingResponse.data = data
             res.send({
@@ -134,9 +127,6 @@ class GreetingController{
         }
 
         const greetingResponse = {
-            success : null,
-            message : null,
-            data : null
         }
 
         greetingService.update(greetingData, (error, data) => {
@@ -176,8 +166,6 @@ class GreetingController{
         }
 
         const greetingResponse = {
-            success : null,
-            message : null,
         }
 
         greetingService.delete(greetingData, (error, data) => {
