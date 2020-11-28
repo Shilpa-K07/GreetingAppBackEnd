@@ -2,7 +2,7 @@ const greetingService = require('../services/greeting.svc.js');
 const Joi = require('joi'); 
 
 const inputPattern = Joi.object().keys({
-    name : Joi.string().regex(/^[a-zA-Z ]+$/).min(3).required(),
+    name : Joi.string().regex(/^[a-zA-Z ]+$/).min(3).required().error(new Error("Name should contain only characters of minimum length 2")),
     message : Joi.string().allow('', null)
 })
 
@@ -21,30 +21,28 @@ class GreetingController{
         const greetingResponse = {
         }    
 
-        const validationResult = inputPattern.validate(greetingData); 
+       const validationResult =  inputPattern.validate(greetingData);
 
-        if(validationResult.error){
-            greetingResponse.success = false;
-            greetingResponse.message =  "Name should contain only characters of minimum length 2";
+       if(validationResult.error){
             return res.status(400).send({
-                greetingResponse
+                success : greetingResponse.success = false,
+                message: greetingResponse.message =  validationResult.error.message
             });
         }
 
         greetingService.create(greetingData, (error, data) => {
             if(error){
-                greetingResponse.success = false
-                greetingResponse.message = "Some error occurred while creating greeting"
+                
                 return res.status(500).send({
-                greetingResponse
+                success : greetingResponse.success = false,
+                message : greetingResponse.message = "Some error occurred while creating greeting"
                 });
             }
-            
-            greetingResponse.success = true
-            greetingResponse.message = "Greeting added successfully !"
-            greetingResponse.data = data
+
             res.send({
-                greetingResponse
+                success : greetingResponse.success = true,
+                message : greetingResponse.message = "Greeting added successfully !",
+                data : greetingResponse.data = data
             });
        });
     }
@@ -59,18 +57,16 @@ class GreetingController{
 
         greetingService.findAll((error, data) => {
             if(error){
-                greetingResponse.success = false
-                greetingResponse.message = "Some error occurred while retrieving greetings"
                 return res.status(500).send({
-                   greetingResponse
+                    success : greetingResponse.success = false,
+                    message : greetingResponse.message = "Some error occurred while retrieving greetings"
                 });
             }
-
-            greetingResponse.success = true
-            greetingResponse.message = "Successfully retrieved greetings !"
-            greetingResponse.data = data
+            
             res.send({
-                greetingResponse
+                success : greetingResponse.success = true,
+                message : greetingResponse.message = "Successfully retrieved greetings !",
+                data : greetingResponse.data = data
             });
         });
     }
@@ -90,26 +86,25 @@ class GreetingController{
 
         greetingService.findOne(greetingData, (error, data) => {
             if(error){
-                greetingResponse.success = false
-                greetingResponse.message = "Error retrieving note with id "+ greetingData.greetingID
                 return res.status(500).send({
-                   greetingResponse
+                    success : greetingResponse.success = false,
+                    message : greetingResponse.message = "Error retrieving note with id "+ greetingData.greetingID
                 });
             }
            
             if(!data){
-                greetingResponse.success = false
-                greetingResponse.message = "Greeing not found with id : "+ greetingData.greetingID
+                
                 return res.status(404).send({
-                    greetingResponse
+                    success : greetingResponse.success = false,
+                    message : greetingResponse.message = "Greeing not found with id : "+ greetingData.greetingID
                 });
             }
 
-            greetingResponse.success = true
-            greetingResponse.message = "Successfully retrieved greeting with id : "+ greetingData.greetingID
-            greetingResponse.data = data
+            
             res.send({
-                greetingResponse
+                success : greetingResponse.success = true,
+                message : greetingResponse.message = "Successfully retrieved greeting with id : "+ greetingData.greetingID,
+                data : greetingResponse.data = data
             });
         });
     }
@@ -131,26 +126,24 @@ class GreetingController{
 
         greetingService.update(greetingData, (error, data) => {
             if(error){
-                greetingResponse.success = false,
-                greetingResponse.message = "Error updating greeting with id : "+ greetingData.greetingID
                 return res.status(500).send({
-                   greetingResponse
+                    success : greetingResponse.success = false,
+                    message : greetingResponse.message = "Error updating greeting with id : "+ greetingData.greetingID
                 });
             }
 
             if(!data) {
-                greetingResponse.success = false,
-                greetingResponse.message = "Greeting not found with id : "+ greetingData.greetingID
+                
                 return res.status(404).send({
-                    greetingResponse
+                    success : greetingResponse.success = false,
+                    message : greetingResponse.message = "Greeting not found with id : "+ greetingData.greetingID
                 });
             }
 
-            greetingResponse.success = true,
-            greetingResponse.message =  "Greeting updated successfully !",
-            greetingResponse.data = data
             res.send({
-                greetingResponse
+                success : greetingResponse.success = true,
+                message : greetingResponse.message =  "Greeting updated successfully !",
+                data : greetingResponse.data = data
             });
         });
     }
@@ -170,25 +163,22 @@ class GreetingController{
 
         greetingService.delete(greetingData, (error, data) => {
             if(error){
-                greetingResponse.success = false
-                greetingResponse.message = "Could not delete greeting with id : "+ greetingData.greetingID
                 return res.status(500).send({
-                   greetingResponse
+                    success : greetingResponse.success = false,
+                    message : greetingResponse.message = "Could not delete greeting with id : "+ greetingData.greetingID
                 });
             }
 
             if(!data) {
-                greetingResponse.success = false
-                greetingResponse.message = "Greeting not found with id : "+ greetingData.greetingID
                 return res.status(404).send({
-                    greetingResponse
+                    success : greetingResponse.success = false,
+                    message : greetingResponse.message = "Greeting not found with id : "+ greetingData.greetingID
                 });
             }
 
-            greetingResponse.success = true
-            greetingResponse.message = "Greeting deleted successfully !"
             res.send({
-                greetingResponse
+                sucess : greetingResponse.success = true,
+                message : greetingResponse.message = "Greeting deleted successfully !"
             });
         });
     }
