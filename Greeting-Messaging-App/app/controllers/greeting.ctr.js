@@ -1,5 +1,6 @@
 const greetingService = require('../services/greeting.svc.js');
 const Joi = require('joi'); 
+const logger = require('../../logger.js')
 
 const inputPattern = Joi.object().keys({
     name : Joi.string().regex(/^[a-zA-Z ]+$/).min(3).required().error(new Error("Name should contain only characters of minimum length 2")),
@@ -32,13 +33,14 @@ class GreetingController{
 
         greetingService.create(greetingData, (error, data) => {
             if(error){
-                
+                logger.error("Some error occurred while creating greeting")
                 return res.status(500).send({
                 success : greetingResponse.success = false,
                 message : greetingResponse.message = "Some error occurred while creating greeting"
                 });
             }
 
+            logger.info("Greeting added successfully !")
             res.send({
                 success : greetingResponse.success = true,
                 message : greetingResponse.message = "Greeting added successfully !",
@@ -57,12 +59,14 @@ class GreetingController{
 
         greetingService.findAll((error, data) => {
             if(error){
+                logger.error("Some error occurred while retrieving greetings");
                 return res.status(500).send({
                     success : greetingResponse.success = false,
                     message : greetingResponse.message = "Some error occurred while retrieving greetings"
                 });
             }
             
+            logger.info("Successfully retrieved greetings !");
             res.send({
                 success : greetingResponse.success = true,
                 message : greetingResponse.message = "Successfully retrieved greetings !",
@@ -86,6 +90,7 @@ class GreetingController{
 
         greetingService.findOne(greetingData, (error, data) => {
             if(error){
+                logger.error("Error retrieving note with id "+ greetingData.greetingID)
                 return res.status(500).send({
                     success : greetingResponse.success = false,
                     message : greetingResponse.message = "Error retrieving note with id "+ greetingData.greetingID
@@ -93,7 +98,7 @@ class GreetingController{
             }
            
             if(!data){
-                
+                logger.warn("Greeing not found with id : "+ greetingData.greetingID)
                 return res.status(404).send({
                     success : greetingResponse.success = false,
                     message : greetingResponse.message = "Greeing not found with id : "+ greetingData.greetingID
@@ -126,6 +131,7 @@ class GreetingController{
 
         greetingService.update(greetingData, (error, data) => {
             if(error){
+                logger.error("Error updating greeting with id : "+ greetingData.greetingID)
                 return res.status(500).send({
                     success : greetingResponse.success = false,
                     message : greetingResponse.message = "Error updating greeting with id : "+ greetingData.greetingID
@@ -133,13 +139,14 @@ class GreetingController{
             }
 
             if(!data) {
-                
+                logger.warn("Greeting not found with id : "+ greetingData.greetingID)
                 return res.status(404).send({
                     success : greetingResponse.success = false,
                     message : greetingResponse.message = "Greeting not found with id : "+ greetingData.greetingID
                 });
             }
 
+            logger.info("Greeting updated successfully !")
             res.send({
                 success : greetingResponse.success = true,
                 message : greetingResponse.message =  "Greeting updated successfully !",
@@ -163,6 +170,7 @@ class GreetingController{
 
         greetingService.delete(greetingData, (error, data) => {
             if(error){
+                logger.error("Could not delete greeting with id : "+ greetingData.greetingID)
                 return res.status(500).send({
                     success : greetingResponse.success = false,
                     message : greetingResponse.message = "Could not delete greeting with id : "+ greetingData.greetingID
@@ -170,12 +178,14 @@ class GreetingController{
             }
 
             if(!data) {
+                logger.warn("Greeting not found with id : "+ greetingData.greetingID);
                 return res.status(404).send({
                     success : greetingResponse.success = false,
                     message : greetingResponse.message = "Greeting not found with id : "+ greetingData.greetingID
                 });
             }
 
+            logger.info("Greeting deleted successfully !")
             res.send({
                 sucess : greetingResponse.success = true,
                 message : greetingResponse.message = "Greeting deleted successfully !"

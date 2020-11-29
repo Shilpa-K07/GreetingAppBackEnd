@@ -6,6 +6,7 @@ var DEBUG_ALREADY_CONNECTING    = 'Already connecting to db server %s.';
 var DEBUG_CONNECTED             = 'Successfully connected to db server %s.';
 var DEBUG_CONNECTION_ERROR      = 'An error has occured while connecting to db server %s.';
  
+var logger = require('../logger.js')
 var blueBird    = require('bluebird');
 var mongoose    = require('mongoose');
 var debug       = require('debug');

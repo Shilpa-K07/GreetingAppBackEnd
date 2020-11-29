@@ -31,8 +31,14 @@ const swaggerDocument = require('./swagger.json')
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 /**
+ * @description require logger 
+ */
+const logger = require('./logger.js')
+
+/**
  * @description listen for requests
  */
 app.listen(process.env.PORT, () => {
     console.log("Server is listening on port ",process.env.PORT);
+    logger.info("Server is listening on port ",process.env.PORT);
 });

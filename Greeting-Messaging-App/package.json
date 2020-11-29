@@ -23,7 +23,8 @@
     "express": "^4.17.1",
     "joi": "^17.3.0",
     "mongoose": "^5.10.15",
-    "swagger-ui-express": "^4.1.5"
+    "swagger-ui-express": "^4.1.5",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
