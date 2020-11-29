@@ -23,9 +23,16 @@ require('./config/mongoDb.js');
 require('./app/routes/greeting.rt.js')(app);
 
 /**
+ * @description require swagger-ui and swagger.json
+ */
+const swaggerUi = require('swagger-ui-express')
+const swaggerDocument = require('./swagger.json')
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+/**
  * @description listen for requests
  */
-//var port = process.env.PORT;
 app.listen(process.env.PORT, () => {
     console.log("Server is listening on port ",process.env.PORT);
 });

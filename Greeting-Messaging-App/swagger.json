@@ -1,0 +1,163 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Greeting App CRUD",
+      "description": "Greeting Application API"
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "tags": [{
+      "name": "Greeting",
+      "description": "API for Greeting"
+    }],
+    "schemes": [
+      "http"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+
+    "paths": {
+        "/greetings": {
+            "get": {
+                "tags": [
+                    "Greetings"
+                ],
+                "summary": "Get all the greetings",
+                "responses": {
+                    "200": {
+                    "description": "OK",
+                    "schema": {
+                        "$ref": "#/definitions/greetings"
+                    }
+                    }
+                }
+            }
+        },
+
+        "/addGreeting": {
+            "post": {
+                "tags": [
+                    "Greetings"
+                ],
+                "summary": "Create new greeting",
+                "parameters": [
+                {
+                    "name": "greeting",
+                    "in": "body",
+                    "description": "Greeting that we want to create",
+                    "schema": {
+                        "$ref": "#/definitions/greeting"
+                    }
+                }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                    "description": "created new greeting",
+                    "schema": {
+                        "$ref": "#/definitions/greeting"
+                    }
+                }
+                }
+            }
+        } ,
+
+         "/greeting/{id}" : {
+            "parameters" : [
+            {
+                "name" : "id",
+                "in" : "path",
+                "required" : true,
+                "description" : "ID of the greeting that we want to find",
+                "type" : "string"
+            }
+            ],
+            "delete": {
+                "summary": "Delete user with given ID",
+                    "tags": [
+                        "Greetings"
+                 ],
+                    "responses": {
+                        "200": {
+                        "description": "Greeting is deleted",
+                    "schema": {
+                        "$ref": "#/definitions/greeting"
+                        }
+                    }
+                }
+            },
+
+            "put" : {
+                "summary" : "Update greeting with ID",
+                 "tags" : [
+                     "Greetings"
+                 ],
+                "parameters" : [{
+                    "name" : "greeting",
+                    "in" : "body",
+                    "description" : "Greeting with new values",
+                    "schema" : {
+                        "$ref" : "#/definitions/updateGreeting"
+                    }
+                }],
+                "responses": {
+                    "200" : {
+                    "description" : "Greeting is updated",
+                    "schema" : {
+                        "$ref" : "#/definitions/greeting"
+                    }
+                    }
+                }
+            }
+        }
+        },
+           
+    "definitions": {
+      "greeting": {
+        "required": [
+          "name",
+          "_id",
+          "companies"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "uniqueItems": true
+          },
+
+          "name": {
+            "type": "string"
+          },
+
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "greetings": {
+        "type": "array",
+        "$ref": "#/definitions/greeting"
+        },
+
+      "updateGreeting" : {
+        "required": [
+            "name"
+        ],
+        "properties" : {
+            "name": {
+                "type" : "string"
+            },
+            "message" : {
+                "type" : "string"
+            }
+        }
+      }
+    }
+}
