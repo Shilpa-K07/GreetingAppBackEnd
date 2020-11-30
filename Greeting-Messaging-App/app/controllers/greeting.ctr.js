@@ -2,8 +2,12 @@ const greetingService = require('../services/greeting.svc.js');
 const Joi = require('joi'); 
 const logger = require('../../logger.js')
 
-const inputPattern = Joi.object().keys({
-    name : Joi.string().regex(/^[a-zA-Z ]+$/).min(3).required().error(new Error("Name should contain only characters of minimum length 2")),
+const inputPattern = Joi.object({
+    name : Joi.string().regex(/^[a-zA-Z ]+$/).min(3).required().messages({
+        'string.pattern.base': 'name should contain only characters.',
+        'string.min': 'name must have minimum 2 characters.',
+        'string.empty': 'name can not be empty',
+      }),
     message : Joi.string().allow('', null)
 })
 
@@ -23,7 +27,7 @@ class GreetingController{
         }    
 
        const validationResult =  inputPattern.validate(greetingData);
-
+    
        if(validationResult.error){
             return res.status(400).send({
                 success : greetingResponse.success = false,

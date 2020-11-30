@@ -6,12 +6,11 @@ var DEBUG_ALREADY_CONNECTING    = 'Already connecting to db server %s.';
 var DEBUG_CONNECTED             = 'Successfully connected to db server %s.';
 var DEBUG_CONNECTION_ERROR      = 'An error has occured while connecting to db server %s.';
  
-var logger = require('../logger.js')
 var blueBird    = require('bluebird');
 var mongoose    = require('mongoose');
-var debug       = require('debug');
- 
-var d           = debug('mongo-db-instance');
+var debug      = require('debug');
+
+var d           = debug('mongoDb');
 
 var isState = function(state){
     return mongoose.connection.readyState === mongoose.Connection.STATES[state];
@@ -68,6 +67,7 @@ MongoDBAdapter.prototype.connect = function(){
         d(DEBUG_ALREADY_CONNECTING, this.uri);
       } else {
         d(DEBUG_CONNECTING, this.uri);
+        console.log(DEBUG_ALREADY_CONNECTING);
         mongoose.connect(this.uri, this.options);
       }
     
