@@ -36,10 +36,7 @@
                     }
                     }
                 }
-            }
-        },
-
-        "/addGreeting": {
+            },
             "post": {
                 "tags": [
                     "Greetings"
@@ -67,9 +64,10 @@
                 }
                 }
             }
-        } ,
+            
+        },
 
-         "/greeting/{id}" : {
+        "/greetings/{id}" : {
             "parameters" : [
             {
                 "name" : "id",
@@ -79,6 +77,21 @@
                 "type" : "string"
             }
             ],
+            "get": {
+                "tags": [
+                    "Greetings"
+                ],
+                "summary": "Get greeting by Id",
+                "responses": {
+                    "200": {
+                    "description": "OK",
+                    "schema": {
+                        "$ref": "#/definitions/greetings"
+                    }
+                    }
+                }
+            },
+
             "delete": {
                 "summary": "Delete user with given ID",
                     "tags": [
@@ -122,15 +135,10 @@
     "definitions": {
       "greeting": {
         "required": [
-          "name",
-          "_id",
-          "companies"
+          "name"
         ],
         "properties": {
-          "_id": {
-            "type": "string",
-            "uniqueItems": true
-          },
+
 
           "name": {
             "type": "string"
